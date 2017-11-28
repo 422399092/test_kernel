@@ -84,26 +84,28 @@ disp_loader_sys        db "laoding sys.."
 
 gdt:
 	dw 0, 0, 0, 0
-kernel_code_desc:
-	dw	0x07FF
+kernel_code_desc:;0x50000~0x80000
+  dw	0xFFFF
+  dw	0x0000
+  db  0x05
+  dw	0xC09A
+  db	0x00
+kernel_data_desc:; 0x80000~0x90000
+	dw	0xFFFF
 	dw	0x0000
-	dw	0x9A05
-	dw	0x00C0
-kernel_data_desc:
-	dw	0x07FF
-	dw	0x0000
-	dw	0x9200
-	dw	0x00C0
-test_video_desc:;video addr:0B8000h
-	dw	0x07FF
+  db  0x08
+	dw	0xC092
+	db	0x00
+kernel_video_desc:;video addr:0xB8000
+  dw	0xFFFF
 	dw	0x8000
-	dw	0x920B
-	dw	0x00C0
+  db  0x0B
+	dw	0xC092
+	db	0x00
 gdt_end:
 
 idtr:
-	dw	0			;// idt limit=0
-	dw	0,0			;// idt base=0L
+	dw	0, 0 ,0
 gdtr:
     dw  0x800
     dd  0x7c00 + gdt
