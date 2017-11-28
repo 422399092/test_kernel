@@ -28,7 +28,26 @@ start:
   mov dx,0x0101
   int 0x10
 
-  jmp kernel_bin_seg:0x0
+setA20.1:
+  in      al, 0x64
+  test    al, 0x2
+  jnz     setA20.1
+  mov     al, 0xd1
+  out     byte 0x64, al
+setA20.2:
+  in      al, 0x64
+  test    al, 0x2
+  jnz     setA20.2
+  mov     al, 0xdf
+  out     byte 0x60, al
+init_gdtr:
+  cli;close all int
+  lidt [idtr]
+	lgdt [gdtr]
+	mov	ax, 0x0001
+	lmsw	ax ;switch on PE in cr0
+	; jmp $ ;test
+	jmp dword 0x08:0x0
 
 read_kernel:; read 128KB kernel img to 0x50000
   push es
@@ -62,6 +81,32 @@ read_kernel_end:
 ret
 
 disp_loader_sys        db "laoding sys.."
+
+gdt:
+	dw 0, 0, 0, 0
+kernel_code_desc:
+	dw	0x07FF
+	dw	0x0000
+	dw	0x9A05
+	dw	0x00C0
+kernel_data_desc:
+	dw	0x07FF
+	dw	0x0000
+	dw	0x9200
+	dw	0x00C0
+test_video_desc:;video addr:0B8000h
+	dw	0x07FF
+	dw	0x8000
+	dw	0x920B
+	dw	0x00C0
+gdt_end:
+
+idtr:
+	dw	0			;// idt limit=0
+	dw	0,0			;// idt base=0L
+gdtr:
+    dw  0x800
+    dd  0x7c00 + gdt
 
 times 510-($-$$)  db 0
 dw 0xaa55

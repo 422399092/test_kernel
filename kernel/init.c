@@ -1,4 +1,4 @@
-// extern 
+// extern
 
 void init() {
 
