@@ -1,31 +1,24 @@
-[SECTION .s16]
-[BITS 16]
-global x86_16_print, x86_16_disp_clear
-x86_16_print:;msg ptr, msg len
-  push bp
-  mov bp, sp
-  push ax
-  push bx
-  push cx
-  push dx
-  mov ax,[bp+4]
-  mov cx,[bp+6]
-  mov bp,ax
-  mov ax,0x1301
-  mov bx,15
-  mov dx,0x0101
-  int 0x10
-  pop dx
-  pop cx
-  pop bx
-  pop ax
-  pop bp
-ret 4
+%include	"const.s"
 
-x86_16_disp_clear:
-	mov ax,0x0600
-	mov cx,0x0000
-	mov dx,0x174f
-	mov bh,0x00
-	int 0x10
+[BITS 32]
+global x86_32_print, x86_32_disp_clear
+
+x86_32_disp_clear:
+
+ret
+
+x86_32_print:;x86_32_print(char *c, int row, short col, short color);
+  push ebp
+  mov ebp, esp
+  mov eax, 0x18
+  mov gs, ax
+  mov eax, STACK_PARAM_3
+  imul eax, eax, 80
+  add eax, STACK_PARAM_2
+  imul eax, eax, 2
+  mov edi, eax
+  mov ah, STACK_PARAM_4
+  mov al, STACK_PARAM_1
+  mov [gs:edi], ax
+  pop ebp
 ret

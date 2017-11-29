@@ -9,6 +9,4 @@ x86_asm_32_memcpy:
   push ecx
   push edx
 
-  
-
 ret

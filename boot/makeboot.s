@@ -1,4 +1,4 @@
 incbin "bin/boot.bin"
-incbin "bin/enter.bin"
-; fill 1.44MBytes
-times 1474560 - ($ - $$) db 0
+incbin "bin/kernel.bin"
+; fill 1MBytes
+times 1048576 - ($ - $$) db 0
