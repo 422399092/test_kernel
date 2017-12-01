@@ -1,14 +1,23 @@
 [bits 32]
 
 [SECTION .bss]
-stack_space		resb	2 * 1024
+stack_space		resb	8 * 1024
 stack_top:
 
 [SECTION .text]
+extern init, x86_32_print, trace
 global _enter_
-extern init
-
 _enter_:
+  mov ax, 0x10
+  mov ds, ax
+  mov ss, ax
+  mov es, ax
+  mov fs, ax
+  mov ax, 0x18
+  mov gs, ax
   mov	esp, stack_top
   call init
-  jmp $
+sleep:
+  nop
+  nop
+  jmp sleep

@@ -1,0 +1,19 @@
+==相同的指令还有：
+==JNC，当CF=0时跳转；
+==JZ，当ZF=1时跳转，
+==JNZ，当ZF=0时跳转；
+==JO，当OF=1时跳转，
+==JNO，当OF=0时跳转；
+==JP，当PF=1时跳转……
+==依此类推，标志寄存器的各个位基本上都可以用来做“条件跳转”的条件。
+==用于大小判断型的：
+==  cmp op1,op2
+==  JXX Label
+== 其中JXX有以下几种：
+==JA表示op1>op2，JNA表示op1<=op2；
+==JB表示op1<op2，JNB表示op1>=op2；
+==JE表示op1=op2，JNE表示op1<>op2；
+==还有JAE、JNAE、JBE、JNBE等等功能重复不再赘述。
+==以上是无符号数的比较。
+==有符号数的比较将A换成G，将B换成L即可。
+==A=above B=below G=greater L=less

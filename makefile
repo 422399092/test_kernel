@@ -10,11 +10,11 @@ boot_src   = boot
 kernel_src = kernel
 
 cc_flg32 = -fno-builtin -fno-builtin-FUNCTION -nostdinc -m32 -c
-cc_flg64 = -fno-builtin -fno-builtin-FUNCTION -nostdinc -m64 -c
+cc_flg64 = -fno-stack-protector -fno-builtin -fno-builtin-FUNCTION -nostdinc -m64 -c
 
-all:	sys.img
+all: sys.img
 
-sys.img:	clean boot.bin libs.bin kernel.bin
+sys.img: clean boot.bin libs.bin kernel.bin
 	$(asm) -f bin $(boot_src)/makeboot.s -o bin/sys.img
 
 boot.bin:
@@ -23,9 +23,9 @@ boot.bin:
 kernel.bin:
 	$(cc) $(cc_flg32) $(kernel_src)/init.c -o $(build)/init.o
 	$(asm) -f elf32 $(kernel_src)/enter.s -o $(build)/enter.o
-	$(ld) -Ttext 0x0 -e _enter_ -m elf_i386 -o $(build)/kernel.bin $(build)/*.o
+	$(ld) -T makefile.lds -m elf_i386 -o $(build)/kernel.bin $(build)/*.o
 
-libs.bin:	$(asm_incs)/const.s
+libs.bin: $(asm_incs)/const.s
 	$(asm) -f elf32 -I $(asm_incs)/ -o $(build)/x86print.o $(asm_incs)/x86print.s
 	$(asm) -f elf32 -I $(asm_incs)/ -o $(build)/x86mem.o $(asm_incs)/x86mem.s
 
