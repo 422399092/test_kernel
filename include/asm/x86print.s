@@ -13,8 +13,6 @@ ret
 x86_32_print:;x86_32_print(char c, int col, int row, int color);
   push ebp
   mov ebp, esp
-  mov ax, 0x18
-  mov gs, ax
   mov eax, STACK_PARAM_3
   imul eax, eax, 80
   add eax, STACK_PARAM_2
@@ -27,18 +25,18 @@ x86_32_print:;x86_32_print(char c, int col, int row, int color);
 ret
 
 trace:
-	push	ebp
+	push ebp
 	mov	ebp, esp
 	mov	esi, [ebp + 8]	; pszInfo
 	mov	edi, [disp_pos]
 	mov	ah, 0Fh
 .1:
 	lodsb
-	test	al, al
+	test al, al
 	jz	.2
 	cmp	al, 0Ah	; 是回车吗?
 	jnz	.3
-	push	eax
+	push eax
 	mov	eax, edi
 	mov	bl, 160
 	div	bl

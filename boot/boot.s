@@ -1,17 +1,17 @@
 boot_pos              equ 0x7c00
 boot_seg       	      equ 0x07c0;31KB,   segment 0x7c00
-ss_seg                equ 0x8000;512KB   segment 0x80000
-kernel_seg            equ 0x4000;256KB,  segment 0x40000
+ss_seg                equ 0x9000;576KB   segment 0x90000
+kernel_seg            equ 0x1000;64KB,  segment 0x10000
 
 jmp start
 
 start:
   mov ax,boot_seg
-  mov	ds,ax
-  mov	es,ax
+  mov ds,ax
+  mov es,ax
   mov ax,ss_seg
-  mov	ss,ax
-  mov	sp,200h
+  mov ss,ax
+  mov sp,0x0
 
   mov ax,0x0600
   mov cx,0x0000
@@ -74,16 +74,28 @@ ret
 
 gdt_desc:
   dw 0, 0, 0, 0
-kernel_code_desc:;0x40000~0x80000
+kernel_code_desc:;0x10000~0x80000
   dw 0xFFFF
   dw 0x0000
-  db 0x04
+  db 0x01
   dw 0xC09A
   db 0x00
-kernel_data_desc:; 0x80000~0x100000
+kernel_data_desc:;0x10000~0x80000
   dw 0xFFFF
   dw 0x0000
-  db 0x04
+  db 0x01
+  dw 0xC092
+  db 0x00
+kernel_use_desc:;0x100000~0x200000
+  dw 0xFFFF
+  dw 0x0000
+  db 0x10
+  dw 0xC092
+  db 0x00
+kernel_ss_desc:; 0x90000~0xA0000
+  dw 0xFFFF
+  dw 0x0000
+  db 0x09
   dw 0xC092
   db 0x00
 kernel_video_desc:;video addr:0xB8000

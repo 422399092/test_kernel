@@ -13,7 +13,7 @@ _enter_:
   mov ss, ax
   mov es, ax
   mov fs, ax
-  mov ax, 0x18
+  mov ax, 0x28
   mov gs, ax
   mov	esp, stack_top
   call init
