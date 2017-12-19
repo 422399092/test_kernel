@@ -5,21 +5,30 @@
 
 void init_mm_dir()
 {
-  struct page_dir_info* pd = NULL;
-  *((void **)pd) += 0x100000;
-  int i = 0;
-  for (; i < PAGE_DIR_NUM; i++)
+  uint32* pd = NULL;
+  *((void **)pd) += PAPGE_DIR_REG_POS;
+  uint32 i = 0;
+  for (; i < 1024; i++)
   {
-    pd->flg = 7;
-    pd->avl = 0;
-    pd->addr = (i + 1) * PAGE_SIZE;
+    if (i < PAGE_DIR_NUM)
+      *pd = (uint32)(PAPGE_TABLE_REG_POS + i * 0x1000 + 7);
+    else
+      *pd = (uint32)0;
+
     *((void **)pd) += 4;
   }
 }
 
 void init_mm_page()
 {
-
+  uint32* pt = NULL;
+  *((void **)pt) += PAPGE_TABLE_REG_POS;
+  uint32 i = 0;
+  for (; i < PAGE_TABLE_NUM * 1024; i++)
+  {
+    *pt = (uint32)(i * 0x1000 + 7);
+    *((void **)pt) += 4;
+  }
 }
 
 int32 init_mm()
