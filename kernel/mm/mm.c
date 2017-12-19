@@ -24,7 +24,7 @@ void init_mm_page()
   uint32* pt = NULL;
   *((void **)pt) += PAPGE_TABLE_REG_POS;
   uint32 i = 0;
-  for (; i < PAGE_TABLE_NUM * 1024; i++)
+  for (; i < PAGE_NUM; i++)
   {
     *pt = (uint32)(i * 0x1000 + 7);
     *((void **)pt) += 4;

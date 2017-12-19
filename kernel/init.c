@@ -24,4 +24,10 @@ void init() {
   ret = init_mm();
   if (ret == 0)
     trace("init_mm() is error \n");
+
+  ptr = NULL;
+  *((void **)ptr) += 0x100000;
+  *ptr = 53;
+
+  test();
 }
