@@ -7,23 +7,20 @@ void x86_32_disp_clear();
 void trace(char *str);
 
 void test() {
-  char *ptr = NULL;
-  *((void **)ptr) += 0x100000;
-  *ptr = 54;
-  x86_32_print(*ptr, 0, 15, 0xA0);
+  page_info_t *ptr = (void*)(PAGE_INFO_POS+2048);
+  x86_32_print(*(char*)ptr, 0, 14, 0xA0);
+  x86_32_print(*(char*)(ptr-1), 0, 15, 0x0A);
 }
 
 void init() {
   trace("\nenter kernel.\n\0");
   trace("init kernel.\n\0");
 
-  test();
-
   int ret;
   ret = init_kdata();
-  if (ret) trace("init_kdata() is error \n");
+  if (ret) trace("init_kdata() is error. \n");
   ret = init_mm();
-  if (ret) trace("init_mm() is error \n");
-
+  if (ret) trace("init_mm() is error. \n");
+  test();
   // set_sti();
 }
