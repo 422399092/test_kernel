@@ -20,6 +20,7 @@ boot.bin:
 	$(asm) -f bin $(boot_src)/boot.s -o $(build)/boot.bin
 
 kernel.bin:
+	$(cc) $(cc_flg32) $(kernel_src)/kmalloc.c -o $(build)/kmalloc.o
 	$(cc) $(cc_flg32) $(kernel_src)/kdata.c -o $(build)/kdata.o
 	$(cc) $(cc_flg32) $(kernel_src)/mm/mm.c -o $(build)/mm.o
 	$(cc) $(cc_flg32) $(kernel_src)/init.c -o $(build)/init.o
