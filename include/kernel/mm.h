@@ -6,8 +6,6 @@
 #define PAGE_SIZE                     4096
 #define PAGE_DIR_REG_POS              0x400000
 #define PAGE_TABLE_REG_POS            0x402000
-#define PAGE_INFO_POS                 0x300000
-#define KENREL_USE_PAGE_NUM           2048
 
 typedef struct page_info_s page_info_t;
 
