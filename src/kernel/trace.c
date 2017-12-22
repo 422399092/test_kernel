@@ -94,10 +94,11 @@
   set_gs_edi_val(c|0x0A00)
 
 /* VGA is a memory mapping interface, you may view it as an 80x25 array
- * which located at 0x8b000 (defined in main.ld).
+ * vga mem pos at 0xB8000.
  * */
 static uint16 px = 0;
 static uint16 py = 0;
+
 /* clear screen */
 void clear_screen()
 {
@@ -109,7 +110,6 @@ void clear_screen()
   }
 }
 
-/* ----------------------------------------------------- */
 void putc(char c)
 {
   if(c == '\b') {
