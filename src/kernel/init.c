@@ -1,28 +1,26 @@
+#include <asm/asm.h>
 #include <kernel/mm.h>
 #include <kernel/kdata.h>
-#include <asm/asm.h>
+#include <kernel/trace.h>
 
-void x86_32_print(char c, int col, int row, int color);
-void x86_32_disp_clear();
-void trace(char *str);
+extern void tracek(char* fmt, ...);
 
-void test() {
-  page_info_t *ptr = (void*)(0x100000+2046);
-  x86_32_print(*(char*)(&ptr[0]), 0, 14, 0xA0);
-  x86_32_print(*(char*)(&ptr[1]), 0, 15, 0x0A);
-  x86_32_print(*(char*)(&ptr[2]), 0, 16, 0x0A);
-  x86_32_print(*(char*)(&ptr[3]), 0, 16, 0xA0);
+void test()
+{
+  int32 i;
+  for (i = 2; i < 30; i++) {
+    tracek("init_mm(%d) is error. \n", i);
+  }
 }
 
 void init() {
-  trace("\nenter kernel.\n\0");
-  trace("init kernel.\n\0");
-
+  clear_screen();
   int ret;
   ret = init_kdata();
-  if (ret) trace("init_kdata() is error. \n");
+  if (ret) tracek("init_kdata() is error. \n");
   ret = init_mm();
-  if (ret) trace("init_mm() is error. \n");
+  if (ret) tracek("init_mm(%d) is error. \n", 9);
+
   test();
   // set_sti();
 }

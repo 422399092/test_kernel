@@ -21,6 +21,7 @@ boot.bin:
 
 kernel.bin:
 	$(cc) $(cc_flg32) $(kernel_src)/kmalloc.c -o $(build)/kmalloc.o
+	$(cc) $(cc_flg32) $(kernel_src)/trace.c -o $(build)/trace.o
 	$(cc) $(cc_flg32) $(kernel_src)/kdata.c -o $(build)/kdata.o
 	$(cc) $(cc_flg32) $(kernel_src)/mm/mm.c -o $(build)/mm.o
 	$(cc) $(cc_flg32) $(kernel_src)/init.c -o $(build)/init.o
@@ -30,6 +31,7 @@ kernel.bin:
 libs.bin: $(asm_incs)/const.s
 	$(asm) -f elf32 -I $(asm_incs)/ -o $(build)/x86print.o $(asm_incs)/x86print.s
 	$(asm) -f elf32 -I $(asm_incs)/ -o $(build)/x86mem.o $(asm_incs)/x86mem.s
+	$(cc) $(cc_flg32) $(libs)/string.c -o $(build)/string.o
 
 clean:
 	rm -rf $(build)

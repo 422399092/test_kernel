@@ -1,5 +1,5 @@
 #include <string.h>
-#include <def.h>
+#include <kernel/def.h>
 
 void* memcpy(void *dest, void *src, unsigned int count) {
     char *sp = (char *)src;

@@ -11,6 +11,7 @@ void* kmalloc(uint32 size)
     cur_kernel_mem_pos += size;
     return ptr;
   }
+
   return NULL;
 }
 
