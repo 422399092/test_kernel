@@ -34,8 +34,8 @@ void init_mm_page()
     pi->type = 0;
     pi->other = 0;
 
-    pt += 4;
-    pi += 1;
+    pt++;
+    pi++;
   }
 }
 
@@ -53,14 +53,14 @@ int32 init_mm()
 void* get_free_page()
 {
   void *fp = NULL;
-  page_info_t *pi;
+  page_info_t *page;
 
   set_cli();
   uint32 i;
   for (i = 0; i < PAGE_NUM; i++)
   {
-    pi = &page_infos[i];
-    if (!pi->used) {
+    page = &page_infos[i];
+    if (!page->used) {
       fp = (void*)(i * PAGE_SIZE);
       break;
     }

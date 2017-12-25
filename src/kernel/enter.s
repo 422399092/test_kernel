@@ -12,9 +12,9 @@ _enter_:
   mov ds, ax
   mov ss, ax
   mov es, ax
-  mov fs, ax
-  mov ax, 0x28
   mov gs, ax
+  mov ax, 0x28
+  mov fs, ax
   mov	esp, stack_top
   call init
 sleep:
