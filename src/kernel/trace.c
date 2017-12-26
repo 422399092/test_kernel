@@ -13,7 +13,7 @@
  * */
 static uint16 px = 0;
 static uint16 py = 0;
-static char (*buf)[TRACE_MAX_COL];
+static char (*buf)[TRACE_MAX_COL] = NULL;
 
 static inline void up_csr()
 {
