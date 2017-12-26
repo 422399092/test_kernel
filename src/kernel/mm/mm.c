@@ -16,7 +16,7 @@ void init_mm_dir()
     else
       *pd = (uint32)0;
 
-    pd += 4;
+    pd++;
   }
 }
 
@@ -34,8 +34,7 @@ void init_mm_page()
     pi->type = 0;
     pi->other = 0;
 
-    pt++;
-    pi++;
+    pt++, pi++;
   }
 }
 

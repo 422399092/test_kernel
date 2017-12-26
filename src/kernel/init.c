@@ -26,9 +26,9 @@ void test()
   // }
   // tracek("\n\n==============test char end.\n");
 
-  tracek("\n==============memory:\n\n");
+  tracek("\n==============memory:\n");
   uint32 *ptr1 = (uint32*)PAGE_TABLE_REG_POS;
-  for (i = 0; i < 32; i++) {
+  for (i = 0; i < 128; i++) {
     tracek("0x%x,", *ptr1++);
   }
 }

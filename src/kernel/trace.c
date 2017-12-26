@@ -13,8 +13,7 @@
  * */
 static uint16 px = 0;
 static uint16 py = 0;
-// static char **buf;
-static char buf[TRACE_MAX_ROW][TRACE_MAX_COL];
+static char (*buf)[TRACE_MAX_COL];
 
 static inline void up_csr()
 {
@@ -100,10 +99,9 @@ void putc(char c)
 
 void puts(char *str)
 {
-  int i;
-  for(i=0; i<strlen(str); i++) {
+  int32 i;
+  for(i = 0; i < strlen(str); i++)
     putc(str[i]);
-  }
 }
 
 // print an unsigned integer in base b
@@ -124,17 +122,12 @@ void putn(uint32 n, uint32 b)
 void tracek(char *fmt, ...)
 {
   char c;
-  int n;
-  int *adx = (int*)(void*)&fmt + 1;
+  int32 n;
+  int32 *adx = (int32*)(void*)&fmt + 1;
 
-  // if (buf == NULL) {
-  //   buf = (char **)kmalloc(TRACE_MAX_ROW);
-  //   int32 row, col;
-  //   for (row = 0; row < TRACE_MAX_ROW; row++) {
-  //     buf[row] = (char *)kmalloc(TRACE_MAX_COL);
-  //     memset((char*)buf[row], 0, TRACE_MAX_COL);
-  //   }
-  // }
+  if (buf == NULL) {
+    buf = (char (*)[TRACE_MAX_COL])kmalloc(TRACE_MAX_CHCAR);
+  }
 
 _loop:
   while((c = *fmt++) != '%'){
