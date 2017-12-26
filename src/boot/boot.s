@@ -35,7 +35,7 @@ start:
   ; jmp $ ;test
   jmp dword 0x08:test_skip
 
-read_kernel:; read 128KB kernel img to 0x50000
+read_kernel:; read 128KB kernel img to 0x10000
   push es
   push ds
   mov ax,kernel_seg

@@ -29,8 +29,6 @@ kernel.bin:
 	$(ld) -T makefile.lds -m elf_i386 -o $(build)/kernel.bin $(build)/*.o
 
 libs.bin: $(asm_incs)/const.s
-	$(asm) -f elf32 -I $(asm_incs)/ -o $(build)/x86print.o $(asm_incs)/x86print.s
-	$(asm) -f elf32 -I $(asm_incs)/ -o $(build)/x86mem.o $(asm_incs)/x86mem.s
 	$(cc) $(cc_flg32) $(libs)/string.c -o $(build)/string.o
 
 clean:

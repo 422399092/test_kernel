@@ -9,10 +9,11 @@ extern void tracek(char* fmt, ...);
 void test()
 {
   int32 i;
-  for (i=0; i < 10; i++) {
-    uint32 pos = (80 * 0 + i) * 2;
-    uint16 val = get_vga_edi_val(pos);
-    tracek("vga 0x%x: 0x%x. %d\n", (0xB8000+pos), val, i);
+  tracek("==============VGA:\n");
+  uint16 *vga = kernel_data->vga_text_addr;
+  for (i = 0; i < 10; i++) {
+    tracek("vga 0x%x: 0x%x. %d\n", vga, *vga, i);
+    vga++;
   }
 
   // tracek("\n==============test char:\n\n");
@@ -27,14 +28,14 @@ void test()
   // tracek("\n\n==============test char end.\n");
 
   tracek("\n==============memory:\n");
-  uint32 *ptr1 = (uint32*)PAGE_TABLE_REG_POS;
-  for (i = 0; i < 128; i++) {
+  uint32 *ptr1 = (uint32*)(PAGE_TABLE_REG_POS + 1024 * 4);
+  for (i = 0; i < 64; i++) {
     tracek("0x%x,", *ptr1++);
   }
 }
 
 void init() {
-  clear_screen();
+  clear_tracek();
   int ret;
   ret = init_kdata();
   if (ret) tracek("init_kdata(%d) is error. \n", ret);

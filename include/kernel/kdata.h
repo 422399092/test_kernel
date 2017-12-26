@@ -1,5 +1,9 @@
 #include <kernel/def.h>
 
+#define KERNEL_START_ADDR  0x10000
+#define VGA_TEXT_MODE_ADDR 0xB8000 - KERNEL_START_ADDR
+#define VGA_TEXT_MODE_ADDR_END VGA_TEXT_MODE_ADDR + (25 * 80 * 2)
+
 typedef struct mm_info_s mm_info_t;
 typedef struct cpu_info_s cpu_info_t;
 typedef struct vgamem_s vgamem_t;
@@ -22,7 +26,7 @@ struct vgamem_s {
 struct kernel_data_s {
   mm_info_t   mm_info;
   cpu_info_t  cpu_info;
-  vgamem_t    **vgamem;
+  uint16*     vga_text_addr;
 };
 
 kernel_data_t *kernel_data;

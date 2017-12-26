@@ -6,91 +6,69 @@
 #define TRACE_MAX_ROW  25
 #define TRACE_MAX_COL  80
 #define TRACE_MAX_CHCAR TRACE_MAX_ROW * TRACE_MAX_COL
-#define TRACE_MAX_NUM  TRACE_MAX_CHCAR * 2
-
+#define TRACE_COLOR    0x0200
 /* VGA is a memory mapping interface, you may view it as an 80x25 array
  * vga mem pos at 0xB8000.
  * */
-static uint16 px = 0;
-static uint16 py = 0;
-static char (*buf)[TRACE_MAX_COL] = NULL;
+static uint16 col = 0;
+static uint16 row = 0;
+static uint16 (*vga_addr)[TRACE_MAX_COL] = NULL;
 
-static inline void up_csr()
+void up_csr()
 {
-    uint16 pos = (py * 80 + px);
+    uint16 pos = (row * TRACE_MAX_COL + col);
     outb(0x3D4, 14);
-    outb(0x3D5, pos>>8);
+    outb(0x3D5, pos >> 8);
     outb(0x3D4, 15);
     outb(0x3D5, pos);
 }
 
-static inline void up_row()
+void up_row()
 {
-  if (py == TRACE_MAX_ROW)
+  if (row == TRACE_MAX_ROW)
   {
-      memcpy(buf, &buf[1][0], (TRACE_MAX_ROW-1) * TRACE_MAX_COL);
-      memset(&buf[TRACE_MAX_ROW-1][0], 0, TRACE_MAX_COL);
-      py = TRACE_MAX_ROW - 1;
+      memcpy(vga_addr, &vga_addr[1][0], (TRACE_MAX_ROW-1) * TRACE_MAX_COL * 2);
+      memsetw(&vga_addr[TRACE_MAX_ROW-1][0], 0, TRACE_MAX_COL);
+      row = TRACE_MAX_ROW - 1;
   }
 }
 
-/* clear screen */
-void clear_screen()
-{
-  uint32 row,col,idx=0;
-  for (row = 0; row < 25; row++)
-  {
-    for (col = 0; col < 80; col++)
-      set_vga_edi_val((80 * row + col) * 2, 0x0000);
-  }
-}
-
-static inline void printc(uint16 row, uint16 col, char c)
+static inline void put_buf(uint16 row, uint16 col, char c)
 {
   if (row < TRACE_MAX_ROW && col < TRACE_MAX_COL)
-    buf[row][col] = c;
-}
-
-void print_buf()
-{
-  int32 row, col;
-  for (row = 0; row < TRACE_MAX_ROW; row++) {
-    for (col = 0; col < TRACE_MAX_COL; col++)
-      set_vga_edi_val((80 * row + col) * 2, buf[row][col]|0x0200);
-  }
-  up_csr();
+    vga_addr[row][col] = c|TRACE_COLOR;
 }
 
 void putc(char c)
 {
   if(c == '\b') {
-    if(px > 0) {
-      px--;
-      printc(py, px, ' ');
+    if(col > 0) {
+      col--;
+      put_buf(row, col, ' ');
     }
     else {
-      if (py>0) py--;
-      px = 79;
-      printc(py, px, ' ');
+      if (row>0) row--;
+      col = TRACE_MAX_COL - 1;
+      put_buf(row, col, ' ');
     }
   }
   else if(c == '\t') {
-    px = (px + 4) & ~3;
+    col = (col + 4) & ~3;
   }
   else if(c == '\r') {
-    px = 0;
+    col = 0;
   }
   else if(c == '\n') {
-    px = 0;
-    py++;
+    col = 0;
+    row++;
   }
   else if(c >= ' ') {
-    printc(py, px, c);
-    px++;
+    put_buf(row, col, c);
+    col++;
   }
-  if(px >= 80) {
-    px = 0;
-    py++;
+  if(col >= TRACE_MAX_COL) {
+    col = 0;
+    row++;
   }
 
   up_row();
@@ -116,23 +94,26 @@ void putn(uint32 n, uint32 b)
   putc(ntab[m]);
 }
 
-/* a simpler printk
- * refer to unix v6
- * */
+/** easy clear tracek */
+void clear_tracek()
+{
+  memset((char*)VGA_TEXT_MODE_ADDR, 0, VGA_TEXT_MODE_ADDR_END);
+}
+
+/** for reference unix v6 */
 void tracek(char *fmt, ...)
 {
   char c;
   int32 n;
   int32 *adx = (int32*)(void*)&fmt + 1;
 
-  if (buf == NULL) {
-    buf = (char (*)[TRACE_MAX_COL])kmalloc(TRACE_MAX_CHCAR);
+  if (vga_addr == NULL) {
+    vga_addr = (uint16 (*)[TRACE_MAX_COL])(kernel_data->vga_text_addr);
   }
 
 _loop:
   while((c = *fmt++) != '%'){
     if (c == '\0') {
-      print_buf();
       return;
     }
     putc(c);
