@@ -17,7 +17,7 @@ struct cpu_info_s {
 
 }__attribute__((packed));
 
-struct vgamem_s {
+struct vgamem_text_s {
     char    vga_char:8;
     char    vga_color:4;
     char    vga_bgcolor:4;

@@ -3,6 +3,7 @@
 #include <kernel/kdata.h>
 #include <kernel/kmalloc.h>
 #include <kernel/trace.h>
+#include <kernel/idt.h>
 
 extern void tracek(char* fmt, ...);
 
@@ -30,17 +31,22 @@ void test()
   tracek("\n==============memory:\n");
   uint32 *ptr1 = (uint32*)(PAGE_TABLE_REG_POS + 1024 * 4);
   for (i = 0; i < 64; i++) {
-    tracek("0x%x,", *ptr1++);
+    tracek("0x%x%c%c", *ptr1++, (i != 63 ? ',' : '.'), ((i+1) % 8 ? ' ' : '\n'));
   }
 }
 
-void init() {
+void init()
+{
   clear_tracek();
+
   int ret;
   ret = init_kdata();
-  if (ret) tracek("init_kdata(%d) is error. \n", ret);
+  if (!ret) tracek("init_kdata(%d) is error. \n", ret);
+
   ret = init_mm();
-  if (ret) tracek("init_mm(%d) is error. \n", ret);
+  if (!ret) tracek("init_mm(%d) is error. \n", ret);
+
   test();
   // set_sti();
+  // set_cli();
 }

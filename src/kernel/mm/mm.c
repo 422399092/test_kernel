@@ -3,7 +3,7 @@
 #include <asm/asm.h>
 #include <kernel/kmalloc.h>
 
-page_info_t *page_infos = NULL;
+static page_info_t *page_infos = NULL;
 
 void init_mm_dir()
 {

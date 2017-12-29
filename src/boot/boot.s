@@ -32,8 +32,7 @@ start:
   lgdt [gdtr]
   mov	ax, 0x0001
   lmsw ax ;switch on PE in cr0
-  ; jmp $ ;test
-  jmp dword 0x08:test_skip
+  jmp dword 0x08:kernel_start_pos
 
 read_kernel:; read 128KB kernel img to 0x10000
   push es
@@ -67,7 +66,7 @@ read_kernel_end:
   mov ax, es
   mov ds, ax
   mov ax, word[64]; elf_header_size(0x34) + program_addr_offset(12)
-  mov word[boot_pos + test_skip], ax
+  mov word[boot_pos + kernel_start_pos], ax
   pop ds
   pop es
 ret
@@ -86,24 +85,6 @@ kernel_data_desc:;0x10000~0x80000
   db 0x01
   dw 0xC092
   db 0x00
-kernel_use_desc:;0x100000~0x200000
-  dw 0xFFFF
-  dw 0x0000
-  db 0x10
-  dw 0xC092
-  db 0x00
-kernel_ss_desc:; 0x90000~0xA0000
-  dw 0xFFFF
-  dw 0x0000
-  db 0x09
-  dw 0xC092
-  db 0x00
-kernel_video_desc:;video addr:0xB8000
-  dw 0xFFFF
-  dw 0x8000
-  db 0x0B
-  dw 0xC092
-  db 0x00
 gdt_desc_end:
 
 idtr:
@@ -112,8 +93,8 @@ gdtr:
   dw 0x800
   dd boot_pos + gdt_desc
 
-test_skip dw 0
+kernel_start_pos dw 0
 disp_loader_sys  db "laoding sys.."
 
 times 510-($-$$)  db 0
-dw 0xaa55
+dw 0xAA55

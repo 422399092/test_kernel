@@ -1,3 +1,3 @@
 
-void clear_tracek();
 void tracek(char* str, ...);
+void clear_tracek();

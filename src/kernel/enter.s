@@ -1,11 +1,12 @@
 [bits 32]
 
+; 0x60000 ~ 0xA0000
 [SECTION .bss]
-stack_space		resb	8 * 1024
+stack_space		resb	64 * 1024 ; 0x60000 ~ 0x70000
 stack_top:
 
 [SECTION .text]
-extern init, x86_32_print, trace
+extern init, trace
 global _enter_
 _enter_:
   mov ax, 0x10
@@ -13,7 +14,6 @@ _enter_:
   mov ss, ax
   mov es, ax
   mov gs, ax
-  mov ax, 0x28
   mov fs, ax
   mov	esp, stack_top
   call init

@@ -7,9 +7,7 @@
 #define TRACE_MAX_COL  80
 #define TRACE_MAX_CHCAR TRACE_MAX_ROW * TRACE_MAX_COL
 #define TRACE_COLOR    0x0200
-/* VGA is a memory mapping interface, you may view it as an 80x25 array
- * vga mem pos at 0xB8000.
- * */
+
 static uint16 col = 0;
 static uint16 row = 0;
 static uint16 (*vga_addr)[TRACE_MAX_COL] = NULL;
@@ -25,11 +23,10 @@ void up_csr()
 
 void up_row()
 {
-  if (row == TRACE_MAX_ROW)
-  {
-      memcpy(vga_addr, &vga_addr[1][0], (TRACE_MAX_ROW-1) * TRACE_MAX_COL * 2);
-      memsetw(&vga_addr[TRACE_MAX_ROW-1][0], 0, TRACE_MAX_COL);
-      row = TRACE_MAX_ROW - 1;
+  if (row == TRACE_MAX_ROW) {
+    memcpy(vga_addr, &vga_addr[1][0], (TRACE_MAX_ROW-1) * TRACE_MAX_COL * 2);
+    memsetw(&vga_addr[TRACE_MAX_ROW-1][0], 0, TRACE_MAX_COL);
+    row = TRACE_MAX_ROW - 1;
   }
 }
 
