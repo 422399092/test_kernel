@@ -25,6 +25,7 @@ kernel.bin:
 	$(c) $(c_flg32) $(kernel_src)/kdata.c -o $(build)/kdata.o
 	$(c) $(c_flg32) $(kernel_src)/mm/mm.c -o $(build)/mm.o
 	$(c) $(c_flg32) $(kernel_src)/idt.c -o $(build)/idt.o
+	$(c) $(c_flg32) $(kernel_src)/pm.c -o $(build)/pm.o
 	$(c) $(c_flg32) $(kernel_src)/init.c -o $(build)/init.o
 	$(asm) -f elf32 $(kernel_src)/enter.s -o $(build)/enter.o
 	$(ld) -T makefile.lds -m elf_i386 -o $(build)/kernel.bin $(build)/*.o
