@@ -38,17 +38,6 @@ void init_mm_page()
   }
 }
 
-int32 init_mm()
-{
-  init_mm_dir();
-  init_mm_page();
-
-  set_cr0(PAGE_DIR_REG_POS);
-  set_cr3(0x80000000);
-
-  return SUCCESS;
-}
-
 void* get_free_page()
 {
   void *fp = NULL;
@@ -82,4 +71,15 @@ void free_page(void* ptr)
     pi->used = 0;
     set_sti();
   }
+}
+
+int32 init_mm()
+{
+  init_mm_dir();
+  init_mm_page();
+
+  set_cr0(PAGE_DIR_REG_POS);
+  set_cr3(0x80000000);
+
+  return SUCCESS;
 }

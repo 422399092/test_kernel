@@ -14,20 +14,20 @@ struct mm_zone_s {
 };
 
 static mm_zone_t zones[] = {
-  {          16,  NULL },
-  {          32,  NULL },
-  {          64,  NULL },
-  {         128,  NULL },
-  {         256,  NULL },
-  {         512,  NULL },
-  {        1024,  NULL },
-  {      1024*2,  NULL },
-  {      1024*4,  NULL },
-  {      1024*8,  NULL },
-  {     1024*16,  NULL },
-  {     1024*32,  NULL },
-  {     1024*64,  NULL },
-  {    1024*128,  NULL },
+  { 16,       NULL },
+  { 32,       NULL },
+  { 64,       NULL },
+  { 128,      NULL },
+  { 256,      NULL },
+  { 512,      NULL },
+  { 1024,     NULL },
+  { 1024*2,   NULL },
+  { 1024*4,   NULL },
+  { 1024*8,   NULL },
+  { 1024*16,  NULL },
+  { 1024*32,  NULL },
+  { 1024*64,  NULL },
+  { 1024*128, NULL },
 };
 
 void* malloc(uint32 size)
